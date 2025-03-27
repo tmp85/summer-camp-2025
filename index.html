@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prescott Summer Camp Timeline 2025</title>
+  <style>
+    :root {
+      --nature-color: #4CAF50;
+      --arts-color: #9C27B0;
+      --sports-color: #FF9800;
+      --theater-color: #E91E63;
+      --stem-color: #2196F3;
+      --general-color: #FFC107;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      padding: 20px;
+      background-color: #f5f5f5;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 1800px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 35px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 50px;
+      color: #333;
+      font-size: 48px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 50px;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 27px;
+    }
+
+    .legend-color {
+      width: 52px;
+      height: 52px;
+      margin-right: 21px;
+      border-radius: 10px;
+    }
+
+    .chart-container {
+      overflow-x: auto;
+      margin-top: 50px;
+      position: relative;
+      width: 100%;
+    }
+    
+    @media (max-width: 1800px) {
+      .chart-container {
+        overflow-x: scroll;
+      }
+    }
+
+    .chart {
+      position: relative;
+      min-height: 1800px;
+      width: 100%;
+      margin-top: 130px;
+      overflow-x: visible;
+      padding-right: 100px;
+    }
+
+    .timeline {
+      position: absolute;
+      top: 0;
+      left: 400px;
+      right: 50px;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(92, 1fr);
+    }
+
+    .timeline-label {
+      position: absolute;
+      top: -78px;
+      width: 120px;
+      margin-left: -60px;
+      text-align: center;
+      font-size: 25px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .timeline-grid {
+      border-right: 2px solid #ddd;
+      height: 100%;
+    }
+
+    .camp-labels {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 400px;
+      height: 100%;
+    }
+
+    .camp-label {
+      position: absolute;
+      height: 100px;
+      padding-right: 25px;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 25px;
+      font-weight: bold;
+      color: #333;
+      width: 100%;
+    }
+
+    .camp-row {
+      position: absolute;
+      left: 400px;
+      height: 100px;
+      right: 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .camp-bar {
+      position: absolute;
+      height: 80px;
+      top: 10px;
+      border-radius: 10px;
+      color: white;
+      font-size: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 25px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .camp-bar .date-range {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .camp-bar .description {
+      width: 100%;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .camp-bar:hover {
+      filter: brightness(110%);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+    }
+
+    .tooltip {
+      position: fixed;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 21px 32px;
+      border-radius: 10px;
+      font-size: 25px;
+      z-index: 1000;
+      pointer-events: none;
+      display: none;
+      max-width: 800px;
+    }
+
+    .nature { background-color: var(--nature-color); }
+    .arts { background-color: var(--arts-color); }
+    .sports { background-color: var(--sports-color); }
+    .theater { background-color: var(--theater-color); }
+    .stem { background-color: var(--stem-color); }
+    .general { background-color: var(--general-color); }
+
+    .filter-section {
+      margin-bottom: 50px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: center;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 25px;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 14px;
+      transform: scale(2);
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 21px 40px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 25px;
+    }
+
+    button:hover {
+      background-color: #388E3C;
+    }
+
+    .date-range {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 50px;
+      font-size: 25px;
+    }
+
+    input[type="date"], input[type="number"] {
+      padding: 15px 25px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .camp-label {
+        font-size: 14px;
+      }
+      
+      .camp-bar {
+        font-size: 12px;
+        padding: 0 9px;
+      }
+    }
+
+    /* New styles for selection functionality */
+    .camp-bar.greyed {
+      opacity: 0.3;
+    }
+    .camp-bar.selected {
+      border: 3px solid #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Prescott Summer Camp Timeline 2025</h1>
+    
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color nature"></div>
+        <div>Nature/Outdoor</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color arts"></div>
+        <div>Arts/Crafts</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color sports"></div>
+        <div>Sports/Adventure</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color theater"></div>
+        <div>Theater/Performance</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color stem"></div>
+        <div>STEM/Education</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color general"></div>
+        <div>General/Mixed</div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="checkbox-container">
+        <input type="checkbox" id="nature-filter" checked>
+        <label for="nature-filter">Nature/Outdoor</label>
+      </div>
+      <div class="checkbox-container">
+        <input type="checkbox" id="arts-filter" checked>
+        <label for="arts-filter">Arts/Crafts</label>
+      </div>
+      <div class="checkbox-container">
+        <input type="checkbox" id="sports-filter" checked>
+        <label for="sports-filter">Sports/Adventure</label>
+      </div>
+      <div class="checkbox-container">
+        <input type="checkbox" id="theater-filter" checked>
+        <label for="theater-filter">Theater/Performance</label>
+      </div>
+      <div class="checkbox-container">
+        <input type="checkbox" id="stem-filter" checked>
+        <label for="stem-filter">STEM/Education</label>
+      </div>
+      <div class="checkbox-container">
+        <input type="checkbox" id="general-filter" checked>
+        <label for="general-filter">General/Mixed</label>
+      </div>
+    </div>
+
+    <div class="date-range">
+      <div>
+        <label for="min-age">Minimum Age:</label>
+        <input type="number" id="min-age" min="0" max="18" value="6">
+      </div>
+      <div>
+        <label for="max-age">Maximum Age:</label>
+        <input type="number" id="max-age" min="0" max="18" value="7">
+      </div>
+      <button id="apply-filters">Apply Filters</button>
+      <button id="reset-filters">Reset Filters</button>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart" id="camps-chart">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <script>
+    // Updated camp data (assumed to be current)
+    const campsData = [
+      {
+        campName: "Backcountry Unlimited Adventure Day Camp",
+        shortName: "Backcountry Unlimited",
+        organization: "Backcountry Unlimited",
+        ageRange: "6-12",
+        startDate: "2025-06-09",
+        endDate: "2025-07-25",
+        description: "Adventure-focused with rock climbing, hiking, kayaking, and biking",
+        type: "sports"
+      },
+      {
+        campName: "Boys & Girls Club of Central Arizona",
+        shortName: "Boys & Girls Club",
+        organization: "Boys & Girls Club",
+        ageRange: "6-18",
+        startDate: "2025-05-27",
+        endDate: "2025-07-31",
+        description: "Sports, arts, recreation, character building activities",
+        type: "general"
+      },
+      {
+        campName: "Camp Aloma",
+        shortName: "Camp Aloma",
+        organization: "-",
+        ageRange: "6-12",
+        startDate: "2025-06-02",
+        endDate: "2025-07-31",
+        description: "Sports, Art, Nature",
+        type: "general"
+      },
+      {
+        campName: "Camp Invention",
+        shortName: "Camp Invention",
+        organization: "National Inventors Hall of Fame",
+        ageRange: "5-12",
+        startDate: "2025-06-09",
+        endDate: "2025-06-13",
+        description: "STEM, engineering, inventions",
+        type: "stem"
+      },
+      {
+        campName: "Camp Tuku",
+        shortName: "Camp Tuku",
+        organization: "Camp Tuku",
+        ageRange: "6-17",
+        startDate: "2025-06-02",
+        endDate: "2025-07-19",
+        description: "Mindfulness-based with yoga, archery, swimming, arts & crafts",
+        type: "general"
+      },
+      {
+        campName: "Children's Summer Art Camp",
+        shortName: "Children's Art Camp",
+        organization: "Mountain Artists Guild",
+        ageRange: "6-9",
+        startDate: "2025-06-02",
+        endDate: "2025-07-25",
+        description: "2D/3D art projects, painting, clay",
+        type: "arts"
+      },
+      {
+        campName: "Children's Summer Camp Theatre Program",
+        shortName: "Children's Theatre Program",
+        organization: "-",
+        ageRange: "6-12",
+        startDate: "2025-06-05",
+        endDate: "2025-06-23",
+        description: "Theater",
+        type: "theater"
+      },
+      {
+        campName: "College for Kids",
+        shortName: "College for Kids",
+        organization: "Yavapai College",
+        ageRange: "5-17",
+        startDate: "2025-06-02",
+        endDate: "2025-07-25",
+        description: "STEM, art, language, bike riding",
+        type: "general"
+      },
+      {
+        campName: "James Family YMCA Summer Camp",
+        shortName: "James Family YMCA",
+        organization: "Prescott YMCA",
+        ageRange: "5-12",
+        startDate: "2025-05-27",
+        endDate: "2025-07-30",
+        description: "Weekly themes: sports, STEM, arts",
+        type: "general"
+      },
+      {
+        campName: "Matilda Jr. Theater Camp",
+        shortName: "Matilda Jr. Theater",
+        organization: "Prescott Valley Performing Arts",
+        ageRange: "6-17",
+        startDate: "2025-06-02",
+        endDate: "2025-06-21",
+        description: "Musical theater, acting, stagecraft",
+        type: "theater"
+      },
+      {
+        campName: "Newsies Jr. Theater Camp",
+        shortName: "Newsies Jr. Theater",
+        organization: "Prescott Valley Performing Arts",
+        ageRange: "6-17",
+        startDate: "2025-07-07",
+        endDate: "2025-07-26",
+        description: "Musical theater, acting, performance",
+        type: "theater"
+      },
+      {
+        campName: "Summer Sprouts Nature Camp",
+        shortName: "Summer Sprouts Nature Camp",
+        organization: "Highlands Center for Natural History",
+        ageRange: "4-6",
+        startDate: "2025-07-07",
+        endDate: "2025-07-11",
+        description: "Outdoor ecology and nature crafts",
+        type: "nature"
+      },
+      {
+        campName: "Theater Adventurers",
+        shortName: "Theater Adventurers",
+        organization: "Prescott Center for the Arts",
+        ageRange: "6-10",
+        startDate: "2025-06-02",
+        endDate: "2025-06-27",
+        description: "Drama basics, rehearsal, performance",
+        type: "theater"
+      },
+      {
+        campName: "WildQuest Summer Camp",
+        shortName: "WildQuest Camp",
+        organization: "Prescott Farm Environmental Education Center",
+        ageRange: "6-12",
+        startDate: "2025-06-24",
+        endDate: "2025-08-09",
+        description: "Weekly themes: outdoor skills, STEAM, farm adventures",
+        type: "nature"
+      },
+      {
+        campName: "ZooCamp",
+        shortName: "ZooCamp",
+        organization: "Heritage Park Zoological Sanctuary",
+        ageRange: "6-12",
+        startDate: "2025-06-02",
+        endDate: "2025-07-25",
+        description: "Behind-the-scenes zoo, animal games, crafts",
+        type: "nature"
+      }
+    ];
+
+    // Constants for chart
+    const ROW_HEIGHT = 100;
+    const CHART_START_DATE = new Date('2025-05-01');
+    const CHART_END_DATE = new Date('2025-07-31');
+    const DAYS_IN_CHART = (CHART_END_DATE - CHART_START_DATE) / (1000 * 60 * 60 * 24);
+
+    // Initialize the chart
+    function initChart() {
+      const chart = document.getElementById('camps-chart');
+      const timeline = document.createElement('div');
+      timeline.className = 'timeline';
+
+      // Create timeline labels and grid lines
+      const monthStarts = [
+        new Date(2025, 4, 1),  // May 1
+        new Date(2025, 4, 15), // May 15
+        new Date(2025, 5, 1),  // June 1
+        new Date(2025, 5, 15), // June 15
+        new Date(2025, 6, 1),  // July 1
+        new Date(2025, 6, 15), // July 15
+        new Date(2025, 6, 31)  // July 31
+      ];
+
+      monthStarts.forEach(date => {
+        const dayIndex = Math.floor((date - CHART_START_DATE) / (1000 * 60 * 60 * 24));
+        const grid = document.createElement('div');
+        grid.className = 'timeline-grid';
+        grid.style.gridColumn = dayIndex + 1;
+        const label = document.createElement('div');
+        label.className = 'timeline-label';
+        const leftPos = (dayIndex / DAYS_IN_CHART) * 100;
+        if (date.getDate() === 31 && date.getMonth() === 6) {
+          label.style.left = 'calc(' + leftPos + '% - 80px)';
+        } else {
+          label.style.left = leftPos + '%';
+        }
+        label.textContent = formatDate(date);
+        timeline.appendChild(label);
+        timeline.appendChild(grid);
+      });
+
+      chart.appendChild(timeline);
+
+      // Create camp labels container
+      const campLabels = document.createElement('div');
+      campLabels.className = 'camp-labels';
+      chart.appendChild(campLabels);
+
+      chart.style.height = `${campsData.length * ROW_HEIGHT}px`;
+
+      // Create camp rows and bars
+      let rowIndex = 0;
+      campsData.forEach(camp => {
+        const label = document.createElement('div');
+        label.className = 'camp-label';
+        label.textContent = camp.shortName;
+        label.style.top = `${rowIndex * ROW_HEIGHT}px`;
+        campLabels.appendChild(label);
+
+        const row = document.createElement('div');
+        row.className = 'camp-row';
+        row.style.top = `${rowIndex * ROW_HEIGHT}px`;
+        chart.appendChild(row);
+
+        createCampBar(camp, row, rowIndex);
+        rowIndex++;
+      });
+    }
+
+    // Create individual camp bar
+    function createCampBar(camp, row, rowIndex) {
+      const startDate = new Date(camp.startDate);
+      const endDate = new Date(camp.endDate);
+      const startDays = (startDate - CHART_START_DATE) / (1000 * 60 * 60 * 24);
+      const endDays = (endDate - CHART_START_DATE) / (1000 * 60 * 60 * 24);
+      const duration = endDays - startDays;
+      const totalDays = DAYS_IN_CHART;
+      const adjustedDays = totalDays * 0.985;
+      const startPercent = (startDays / adjustedDays) * 100;
+      const widthPercent = (duration / adjustedDays) * 100;
+
+      const bar = document.createElement('div');
+      bar.className = `camp-bar ${camp.type}`;
+      const dateRange = document.createElement('div');
+      dateRange.className = 'date-range';
+      dateRange.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+      const description = document.createElement('div');
+      description.className = 'description';
+      description.textContent = camp.description;
+      bar.appendChild(dateRange);
+      bar.appendChild(description);
+
+      bar.style.left = `${startPercent}%`;
+      bar.style.width = `${widthPercent}%`;
+      bar.dataset.type = camp.type;
+      bar.dataset.minAge = camp.ageRange.split('-')[0];
+      bar.dataset.maxAge = camp.ageRange.split('-')[1];
+
+      // Tooltip data
+      bar.dataset.tooltip = `
+        <strong>${camp.campName}</strong><br>
+        <strong>Ages:</strong> ${camp.ageRange}<br>
+        <strong>Dates:</strong> ${formatDate(startDate)} - ${formatDate(endDate)}<br>
+        <strong>Focus:</strong> ${camp.description}
+      `;
+
+      bar.addEventListener('mousemove', showTooltip);
+      bar.addEventListener('mouseout', hideTooltip);
+
+      // New click event for selection functionality
+      bar.addEventListener('click', function() {
+        bar.classList.toggle('selected');
+        updateSelectionStyles();
+      });
+
+      row.appendChild(bar);
+    }
+
+    // Update styling based on selection state
+    function updateSelectionStyles() {
+      const bars = document.querySelectorAll('.camp-bar');
+      const anySelected = Array.from(bars).some(bar => bar.classList.contains('selected'));
+      bars.forEach(bar => {
+        if (anySelected) {
+          if (bar.classList.contains('selected')) {
+            bar.classList.remove('greyed');
+          } else {
+            bar.classList.add('greyed');
+          }
+        } else {
+          bar.classList.remove('greyed');
+        }
+      });
+    }
+
+    // Format date as "Mon Day"
+    function formatDate(date) {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${months[date.getMonth()]} ${date.getDate()}`;
+    }
+
+    // Tooltip display functions
+    function showTooltip(e) {
+      const tooltip = document.getElementById('tooltip');
+      tooltip.innerHTML = this.dataset.tooltip;
+      tooltip.style.display = 'block';
+      tooltip.style.left = `${e.pageX + 10}px`;
+      tooltip.style.top = `${e.pageY + 10}px`;
+    }
+
+    function hideTooltip() {
+      document.getElementById('tooltip').style.display = 'none';
+    }
+
+    // Apply filters based on checkboxes and age range
+    function applyFilters() {
+      const natureChecked = document.getElementById('nature-filter').checked;
+      const artsChecked = document.getElementById('arts-filter').checked;
+      const sportsChecked = document.getElementById('sports-filter').checked;
+      const theaterChecked = document.getElementById('theater-filter').checked;
+      const stemChecked = document.getElementById('stem-filter').checked;
+      const generalChecked = document.getElementById('general-filter').checked;
+      const minAge = parseInt(document.getElementById('min-age').value);
+      const maxAge = parseInt(document.getElementById('max-age').value);
+
+      document.querySelectorAll('.camp-bar').forEach(bar => {
+        let show = true;
+        const type = bar.dataset.type;
+        if (
+          (type === 'nature' && !natureChecked) ||
+          (type === 'arts' && !artsChecked) ||
+          (type === 'sports' && !sportsChecked) ||
+          (type === 'theater' && !theaterChecked) ||
+          (type === 'stem' && !stemChecked) ||
+          (type === 'general' && !generalChecked)
+        ) {
+          show = false;
+        }
+
+        const campMinAge = parseInt(bar.dataset.minAge);
+        const campMaxAge = parseInt(bar.dataset.maxAge);
+
+        if (!isNaN(minAge) && !isNaN(campMaxAge) && campMaxAge < minAge) {
+          show = false;
+        }
+        if (!isNaN(maxAge) && !isNaN(campMinAge) && campMinAge > maxAge) {
+          show = false;
+        }
+        bar.style.display = show ? 'flex' : 'none';
+      });
+    }
+
+    function resetFilters() {
+      document.getElementById('nature-filter').checked = true;
+      document.getElementById('arts-filter').checked = true;
+      document.getElementById('sports-filter').checked = true;
+      document.getElementById('theater-filter').checked = true;
+      document.getElementById('stem-filter').checked = true;
+      document.getElementById('general-filter').checked = true;
+      document.getElementById('min-age').value = 6;
+      document.getElementById('max-age').value = 7;
+      applyFilters();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initChart();
+      document.getElementById('apply-filters').addEventListener('click', applyFilters);
+      document.getElementById('reset-filters').addEventListener('click', resetFilters);
+      applyFilters();
+    });
+  </script>
+</body>
+</html>
