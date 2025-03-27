@@ -215,6 +215,18 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
+        
+        /* Instructions for touch users */
+        .touch-instructions {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 18px;
+            color: #333;
+        }
 
         .nature { background-color: var(--nature-color); }
         .arts { background-color: var(--arts-color); }
@@ -291,6 +303,10 @@
     <div class="container">
         <h1>Prescott Summer Camp Timeline 2025</h1>
         
+        <div class="touch-instructions">
+            <strong>Touch Screen Instructions:</strong> Tap a camp to select/deselect it. Long press (touch and hold) on a camp to view details.
+        </div>
+
         <div class="legend">
             <div class="legend-item">
                 <div class="legend-color nature"></div>
@@ -635,6 +651,7 @@
             bar.style.width = `${widthPercent}%`;
             bar.dataset.type = camp.type;
             bar.dataset.campIndex = rowIndex; // Store camp index for selection toggle
+            bar.dataset.showingTooltip = 'false'; // For touch interaction
             
             // Add tooltip data with all available information
             bar.dataset.tooltip = `
@@ -648,12 +665,18 @@
                 ${camp.cost ? `<strong>Cost:</strong> ${camp.cost}<br>` : ''}
                 ${camp.location ? `<strong>Location:</strong> ${camp.location}<br>` : ''}
                 ${camp.registrationLink ? `<strong>Registration:</strong> ${camp.registrationLink}<br>` : ''}
-                <em>Click to ${camp.selected ? 'deselect' : 'select'} this camp</em>
+                <em>Tap to select/deselect this camp<br>
+                Long press to keep this info open</em>
             `;
             
-            // Add tooltip event listeners
+            // Add tooltip event listeners for mouse
             bar.addEventListener('mousemove', showTooltip);
             bar.addEventListener('mouseout', hideTooltip);
+            
+            // Add tooltip event listeners for touch
+            bar.addEventListener('touchstart', handleTouchStart);
+            bar.addEventListener('touchend', handleTouchEnd);
+            bar.addEventListener('touchmove', handleTouchMove);
             
             // Add click event for selection toggle
             bar.addEventListener('click', toggleCampSelection);
@@ -717,8 +740,15 @@
                 top = barRect.bottom + 10;
             }
             
-            // Center the tooltip horizontally with the cursor
-            let left = e.clientX - (tooltipRect.width / 2);
+            // Center the tooltip horizontally with the cursor or tap point
+            let left;
+            if (e.type === 'touchstart') {
+                // For touch events, center over the bar
+                left = barRect.left + (barRect.width / 2) - (tooltipRect.width / 2);
+            } else {
+                // For mouse events, follow the cursor
+                left = e.clientX - (tooltipRect.width / 2);
+            }
             
             // Ensure tooltip doesn't go off the left or right edge of the screen
             if (left < 10) {
@@ -733,10 +763,44 @@
             
             // Make the tooltip visible
             tooltip.style.visibility = 'visible';
+            
+            // If this is a long press/touch event, prevent the regular click event
+            if (e.type === 'touchstart') {
+                this.dataset.showingTooltip = 'true';
+                e.preventDefault();
+            }
         }
 
         function hideTooltip() {
             document.getElementById('tooltip').style.display = 'none';
+        }
+        
+        // Touch handler for the tooltip
+        let longPressTimer;
+        
+        function handleTouchStart(e) {
+            const bar = this;
+            // Start a timer for long press
+            longPressTimer = setTimeout(function() {
+                // This is a long press, show the tooltip
+                showTooltip.call(bar, e);
+            }, 500); // 500ms is a common threshold for long press
+        }
+        
+        function handleTouchEnd() {
+            // Clear the long press timer
+            clearTimeout(longPressTimer);
+            
+            // If we were showing a tooltip, hide it
+            if (this.dataset.showingTooltip === 'true') {
+                this.dataset.showingTooltip = 'false';
+                hideTooltip();
+            }
+        }
+        
+        function handleTouchMove() {
+            // If the user moves their finger, cancel the long press
+            clearTimeout(longPressTimer);
         }
 
         function applyFilters() {
